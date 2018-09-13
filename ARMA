@@ -1,0 +1,23 @@
+import pandas as pd
+from statsmodels.tsa.arima_model import ARMA
+from statsmodels.tsa.stattools import adfuller, arma_order_select_ic
+
+#df2 = {'0':316964,'1':353527,'2':334453,'3':221652,'4':198445,'5':331156,'6':328149}
+#date    total_rating
+#13-01-2016  316964
+#14-01-2016  353527
+#15-01-2016  334453
+#16-01-2016  221652
+#17-01-2016  198445
+#19-01-2016  331156
+#20-01-2016  328149
+#21-01-2016 
+                 
+
+ts = pd.Series([316964,353527,334453,221652,198445,331156,328149], index=['13-01-2016','14-01-2016','15-01-2016','16-01-2016','17-01-2016','19-01-2016','20-01-2016'] )
+model = ARMA(ts, order=(1,1)) #5,7 is decided using arma_order_select_ic method
+results = model.fit(trend='nc', method='css-mle')
+print(results.summary2())
+
+predictedDF = results.predict(6)
+print(predictedDF)
